@@ -1,0 +1,40 @@
+{
+  "name": "ai-budget-backend",
+  "version": "1.0.0",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "lint": "biome lint .",
+    "lint:fix": "biome lint --write .",
+    "format": "biome format --write .",
+    "check": "biome check --write .",
+    "clean": "biome check --write .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "homepage": "https://github.com/ai-budget-app/ai-budget-backend#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ai-budget-app/ai-budget-backend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ai-budget-app/ai-budget-backend/issues"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "express-validator": "^7.3.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongodb": "^7.1.0",
+    "mongoose": "^9.2.1",
+    "multer": "^2.0.2"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.3.15"
+  }
+}
