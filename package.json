@@ -1,6 +1,7 @@
 {
   "name": "ai-budget-backend",
   "version": "1.0.0",
+  "type": "module",
   "description": "",
   "author": "",
   "license": "ISC",
