@@ -9,7 +9,7 @@ const storage = multer.memoryStorage();
 const fileFilter = (req, file, cb) => {
   // Разрешенные типы файлов
   const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
-  
+
   if (allowedTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {

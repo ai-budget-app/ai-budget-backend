@@ -1,6 +1,6 @@
 import { validationResult } from 'express-validator';
-import Expense from './ExpenseSchema.js';
 import BudgetSettings from '../budget/BudgetSchema.js';
+import Expense from './ExpenseSchema.js';
 
 /**
  * Создание нового расхода
@@ -16,14 +16,15 @@ export const createExpense = async (req, res) => {
       });
     }
 
-    const { amount, date, category, note, receipt, isRecurring, recurringFrequency, tags } = req.body;
+    const { amount, date, category, note, receipt, isRecurring, recurringFrequency, tags } =
+      req.body;
     const userId = req.userId;
 
     // Проверка наличия настроек бюджета
     const settings = await BudgetSettings.findOne({ userId });
-    
-    let validatedCategory = category || 'Other';
-    
+
+    const validatedCategory = category || 'Other';
+
     // Проверка, существует ли категория в настройках
     if (settings && !settings.categories.includes(validatedCategory)) {
       return res.status(400).json({
@@ -199,7 +200,8 @@ export const updateExpense = async (req, res) => {
       });
     }
 
-    const { amount, date, category, note, receipt, isRecurring, recurringFrequency, tags } = req.body;
+    const { amount, date, category, note, receipt, isRecurring, recurringFrequency, tags } =
+      req.body;
 
     const expense = await Expense.findOne({
       _id: req.params.id,
@@ -286,8 +288,9 @@ export const getExpensesByCategory = async (req, res) => {
     const { startDate, endDate } = req.query;
 
     // Определение периода
-    let start, end;
-    
+    let start;
+    let end;
+
     if (startDate && endDate) {
       start = new Date(startDate);
       end = new Date(endDate);
@@ -323,8 +326,9 @@ export const getExpensesStatistics = async (req, res) => {
     const { startDate, endDate } = req.query;
 
     // Определение периода
-    let start, end;
-    
+    let start;
+    let end;
+
     if (startDate && endDate) {
       start = new Date(startDate);
       end = new Date(endDate);

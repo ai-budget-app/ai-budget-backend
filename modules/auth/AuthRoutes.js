@@ -9,13 +9,8 @@ const router = express.Router();
  * Валидация для регистрации
  */
 const registerValidation = [
-  body('email')
-    .isEmail()
-    .withMessage('Введите корректный email')
-    .normalizeEmail(),
-  body('password')
-    .isLength({ min: 6 })
-    .withMessage('Пароль должен быть минимум 6 символов'),
+  body('email').isEmail().withMessage('Введите корректный email').normalizeEmail(),
+  body('password').isLength({ min: 6 }).withMessage('Пароль должен быть минимум 6 символов'),
   body('name')
     .isLength({ min: 2, max: 50 })
     .withMessage('Имя должно быть от 2 до 50 символов')
@@ -26,13 +21,8 @@ const registerValidation = [
  * Валидация для входа
  */
 const loginValidation = [
-  body('email')
-    .isEmail()
-    .withMessage('Введите корректный email')
-    .normalizeEmail(),
-  body('password')
-    .notEmpty()
-    .withMessage('Пароль обязателен'),
+  body('email').isEmail().withMessage('Введите корректный email').normalizeEmail(),
+  body('password').notEmpty().withMessage('Пароль обязателен'),
 ];
 
 // Публичные роуты (без авторизации)

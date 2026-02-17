@@ -71,7 +71,7 @@ BudgetSettingsSchema.methods.shouldResetPeriod = function () {
   const now = new Date();
   const startDay = this.monthStart.getDate();
   const currentDay = now.getDate();
-  
+
   // Если текущий день >= дня начала месяца в настройках
   return currentDay >= startDay;
 };
@@ -80,10 +80,10 @@ BudgetSettingsSchema.methods.shouldResetPeriod = function () {
 BudgetSettingsSchema.methods.getCurrentPeriod = function () {
   const now = new Date();
   const startDay = this.monthStart.getDate();
-  
+
   let periodStart;
   let periodEnd;
-  
+
   if (now.getDate() >= startDay) {
     // Текущий период начался в этом месяце
     periodStart = new Date(now.getFullYear(), now.getMonth(), startDay);
@@ -93,7 +93,7 @@ BudgetSettingsSchema.methods.getCurrentPeriod = function () {
     periodStart = new Date(now.getFullYear(), now.getMonth() - 1, startDay);
     periodEnd = new Date(now.getFullYear(), now.getMonth(), startDay - 1, 23, 59, 59, 999);
   }
-  
+
   return { periodStart, periodEnd };
 };
 
