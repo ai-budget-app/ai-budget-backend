@@ -1,0 +1,74 @@
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+        email:
+          type: string
+        name:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+    
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+    
+    Budget:
+      type: object
+      properties:
+        _id:
+          type: string
+        userId:
+          type: string
+        monthlyBudget:
+          type: number
+        currencyCode:
+          type: string
+        monthStart:
+          type: string
+          format: date-time
+    
+    Expense:
+      type: object
+      properties:
+        _id:
+          type: string
+        userId:
+          type: string
+        amount:
+          type: number
+        date:
+          type: string
+          format: date-time
+        category:
+          type: string
+        note:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+    
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
