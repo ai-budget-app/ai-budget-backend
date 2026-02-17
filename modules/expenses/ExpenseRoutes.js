@@ -9,27 +9,15 @@ const router = express.Router();
  * Валидация для создания/обновления расхода
  */
 const expenseValidation = [
-  body('amount')
-    .isFloat({ min: 0 })
-    .withMessage('Сумма должна быть положительным числом'),
-  body('date')
-    .optional()
-    .isISO8601()
-    .withMessage('Дата должна быть в формате ISO 8601'),
-  body('category')
-    .optional()
-    .isString()
-    .trim()
-    .withMessage('Категория должна быть строкой'),
+  body('amount').isFloat({ min: 0 }).withMessage('Сумма должна быть положительным числом'),
+  body('date').optional().isISO8601().withMessage('Дата должна быть в формате ISO 8601'),
+  body('category').optional().isString().trim().withMessage('Категория должна быть строкой'),
   body('note')
     .optional()
     .isString()
     .isLength({ max: 500 })
     .withMessage('Заметка не должна превышать 500 символов'),
-  body('tags')
-    .optional()
-    .isArray()
-    .withMessage('Теги должны быть массивом'),
+  body('tags').optional().isArray().withMessage('Теги должны быть массивом'),
 ];
 
 // Все роуты требуют авторизации

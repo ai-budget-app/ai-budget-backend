@@ -10,19 +10,17 @@ const checkAuth = async (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader) {
-      return res.status(401).json({ 
-        message: 'Токен не предоставлен. Доступ запрещен.' 
+      return res.status(401).json({
+        message: 'Токен не предоставлен. Доступ запрещен.',
       });
     }
 
     // Проверяем формат: "Bearer TOKEN"
-    const token = authHeader.startsWith('Bearer ') 
-      ? authHeader.slice(7) 
-      : authHeader;
+    const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : authHeader;
 
     if (!token) {
-      return res.status(401).json({ 
-        message: 'Неверный формат токена. Используйте Bearer token.' 
+      return res.status(401).json({
+        message: 'Неверный формат токена. Используйте Bearer token.',
       });
     }
 
@@ -37,20 +35,20 @@ const checkAuth = async (req, res, next) => {
   } catch (error) {
     // Обработка различных ошибок JWT
     if (error.name === 'JsonWebTokenError') {
-      return res.status(401).json({ 
-        message: 'Недействительный токен' 
-      });
-    }
-    
-    if (error.name === 'TokenExpiredError') {
-      return res.status(401).json({ 
-        message: 'Токен истек. Пожалуйста, войдите снова.' 
+      return res.status(401).json({
+        message: 'Недействительный токен',
       });
     }
 
-    return res.status(500).json({ 
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({
+        message: 'Токен истек. Пожалуйста, войдите снова.',
+      });
+    }
+
+    return res.status(500).json({
       message: 'Ошибка авторизации',
-      error: error.message 
+      error: error.message,
     });
   }
 };

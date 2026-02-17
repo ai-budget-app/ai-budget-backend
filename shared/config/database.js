@@ -9,7 +9,7 @@ export const connectDB = async () => {
 
     console.log(`MongoDB Connected: ${conn.connection.host}`);
     console.log(`Database: ${conn.connection.name}`);
-    
+
     // Обработка событий подключения
     mongoose.connection.on('error', (err) => {
       console.error('MongoDB connection error:', err);
@@ -25,7 +25,6 @@ export const connectDB = async () => {
       console.log('MongoDB connection closed through app termination');
       process.exit(0);
     });
-
   } catch (error) {
     console.error('MongoDB Connection Error:', error.message);
     process.exit(1);

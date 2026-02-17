@@ -1,16 +1,14 @@
-import jwt from 'jsonwebtoken';
 import { validationResult } from 'express-validator';
+import jwt from 'jsonwebtoken';
 import User from './AuthSchema.js';
 
 /**
  * Генерация JWT токена
  */
 const generateToken = (userId) => {
-  return jwt.sign(
-    { userId },
-    process.env.JWT_SECRET,
-    { expiresIn: process.env.JWT_EXPIRE || '30d' }
-  );
+  return jwt.sign({ userId }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRE || '30d',
+  });
 };
 
 /**

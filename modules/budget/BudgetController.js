@@ -1,6 +1,6 @@
 import { validationResult } from 'express-validator';
-import BudgetSettings from './BudgetSchema.js';
 import Expense from '../expenses/ExpenseSchema.js';
+import BudgetSettings from './BudgetSchema.js';
 
 /**
  * Создание или обновление настроек бюджета
@@ -45,7 +45,14 @@ export const createOrUpdateSettings = async (req, res) => {
       currencyCode: (currencyCode || 'EUR').toUpperCase(),
       monthStart: monthStart ? new Date(monthStart) : new Date(),
       notifications: notifications || { enabled: true, thresholdPercent: 80 },
-      categories: categories || ['Food', 'Transport', 'Entertainment', 'Shopping', 'Health', 'Other'],
+      categories: categories || [
+        'Food',
+        'Transport',
+        'Entertainment',
+        'Shopping',
+        'Health',
+        'Other',
+      ],
     });
 
     await settings.save();
@@ -127,13 +134,12 @@ export const getBudgetSummary = async (req, res) => {
 
     // Расчет оставшегося бюджета
     const remaining = settings.monthlyBudget - totalSpent;
-    const percentUsed = settings.monthlyBudget > 0 
-      ? (totalSpent / settings.monthlyBudget) * 100 
-      : 0;
+    const percentUsed =
+      settings.monthlyBudget > 0 ? (totalSpent / settings.monthlyBudget) * 100 : 0;
 
     // Проверка, нужно ли отправить уведомление
-    const shouldNotify = settings.notifications.enabled && 
-                        percentUsed >= settings.notifications.thresholdPercent;
+    const shouldNotify =
+      settings.notifications.enabled && percentUsed >= settings.notifications.thresholdPercent;
 
     res.json({
       summary: {
@@ -149,8 +155,8 @@ export const getBudgetSummary = async (req, res) => {
         spentByCategory,
         expensesCount: expenses.length,
         shouldNotify,
-        notificationMessage: shouldNotify 
-          ? `Вы потратили ${percentUsed.toFixed(1)}% вашего бюджета!` 
+        notificationMessage: shouldNotify
+          ? `Вы потратили ${percentUsed.toFixed(1)}% вашего бюджета!`
           : null,
       },
     });
@@ -250,7 +256,15 @@ export const getBudgetHistory = async (req, res) => {
     // Генерируем данные за последние N месяцев
     for (let i = 0; i < Number(months); i++) {
       const periodStart = new Date(now.getFullYear(), now.getMonth() - i, startDay);
-      const periodEnd = new Date(now.getFullYear(), now.getMonth() - i + 1, startDay - 1, 23, 59, 59, 999);
+      const periodEnd = new Date(
+        now.getFullYear(),
+        now.getMonth() - i + 1,
+        startDay - 1,
+        23,
+        59,
+        59,
+        999
+      );
 
       // Получаем расходы за период
       const expenses = await Expense.find({

@@ -134,13 +134,15 @@ ExpenseSchema.statics.getStatistics = async function (userId, startDate, endDate
     },
   ]);
 
-  return result[0] || {
-    totalAmount: 0,
-    avgAmount: 0,
-    minAmount: 0,
-    maxAmount: 0,
-    count: 0,
-  };
+  return (
+    result[0] || {
+      totalAmount: 0,
+      avgAmount: 0,
+      minAmount: 0,
+      maxAmount: 0,
+      count: 0,
+    }
+  );
 };
 
 export default mongoose.model('Expense', ExpenseSchema);
