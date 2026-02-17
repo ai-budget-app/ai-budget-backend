@@ -1,0 +1,311 @@
+tags:
+  - name: Expenses
+    description: Управление расходами
+
+paths:
+  /api/expenses:
+    post:
+      summary: Создать новый расход
+      tags: [Expenses]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - amount
+              properties:
+                amount:
+                  type: number
+                  minimum: 0
+                  example: 1500.50
+                date:
+                  type: string
+                  format: date-time
+                  example: "2026-02-17T12:00:00Z"
+                category:
+                  type: string
+                  example: "Продукты"
+                note:
+                  type: string
+                  maxLength: 500
+                  example: "Покупка в магазине"
+                tags:
+                  type: array
+                  items:
+                    type: string
+                  example: ["еда", "супермаркет"]
+      responses:
+        201:
+          description: Расход успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Expense'
+        400:
+          description: Ошибка валидации
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        401:
+          description: Не авторизован
+    
+    get:
+      summary: Получить список расходов
+      tags: [Expenses]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: startDate
+          schema:
+            type: string
+            format: date-time
+          description: Дата начала периода
+        - in: query
+          name: endDate
+          schema:
+            type: string
+            format: date-time
+          description: Дата окончания периода
+        - in: query
+          name: category
+          schema:
+            type: string
+          description: Фильтр по категории
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 50
+          description: Количество записей
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Номер страницы
+      responses:
+        200:
+          description: Список расходов
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  expenses:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Expense'
+                  total:
+                    type: integer
+                  page:
+                    type: integer
+                  pages:
+                    type: integer
+        401:
+          description: Не авторизован
+  
+  /api/expenses/{id}:
+    get:
+      summary: Получить расход по ID
+      tags: [Expenses]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID расхода
+      responses:
+        200:
+          description: Информация о расходе
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Expense'
+        401:
+          description: Не авторизован
+        404:
+          description: Расход не найден
+    
+    put:
+      summary: Обновить расход
+      tags: [Expenses]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID расхода
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: number
+                  minimum: 0
+                date:
+                  type: string
+                  format: date-time
+                category:
+                  type: string
+                note:
+                  type: string
+                  maxLength: 500
+                tags:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        200:
+          description: Расход обновлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Expense'
+        400:
+          description: Ошибка валидации
+        401:
+          description: Не авторизован
+        404:
+          description: Расход не найден
+    
+    delete:
+      summary: Удалить расход
+      tags: [Expenses]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID расхода
+      responses:
+        200:
+          description: Расход удален
+        401:
+          description: Не авторизован
+        404:
+          description: Расход не найден
+  
+  /api/expenses/statistics/by-category:
+    get:
+      summary: Получить статистику расходов по категориям
+      tags: [Expenses]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: startDate
+          schema:
+            type: string
+            format: date-time
+        - in: query
+          name: endDate
+          schema:
+            type: string
+            format: date-time
+      responses:
+        200:
+          description: Статистика по категориям
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    category:
+                      type: string
+                    total:
+                      type: number
+                    count:
+                      type: integer
+        401:
+          description: Не авторизован
+  
+  /api/expenses/statistics/summary:
+    get:
+      summary: Получить общую статистику расходов
+      tags: [Expenses]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: startDate
+          schema:
+            type: string
+            format: date-time
+        - in: query
+          name: endDate
+          schema:
+            type: string
+            format: date-time
+      responses:
+        200:
+          description: Общая статистика
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalExpenses:
+                    type: number
+                  averageExpense:
+                    type: number
+                  expenseCount:
+                    type: integer
+                  largestExpense:
+                    type: number
+                  smallestExpense:
+                    type: number
+        401:
+          description: Не авторизован
+  
+  /api/expenses/bulk-delete:
+    post:
+      summary: Массовое удаление расходов
+      tags: [Expenses]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - ids
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                  example: ["507f1f77bcf86cd799439011", "507f1f77bcf86cd799439012"]
+      responses:
+        200:
+          description: Расходы удалены
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  deletedCount:
+                    type: integer
+        401:
+          description: Не авторизован

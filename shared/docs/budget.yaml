@@ -1,0 +1,165 @@
+tags:
+  - name: Budget
+    description: Управление бюджетом и настройками
+
+paths:
+  /api/budget/settings:
+    post:
+      summary: Создать или обновить настройки бюджета
+      tags: [Budget]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                monthlyBudget:
+                  type: number
+                  minimum: 0
+                  example: 50000
+                currencyCode:
+                  type: string
+                  minLength: 3
+                  maxLength: 3
+                  example: RUB
+                monthStart:
+                  type: string
+                  format: date-time
+                  example: "2026-02-01T00:00:00Z"
+      responses:
+        200:
+          description: Настройки успешно сохранены
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Budget'
+        400:
+          description: Ошибка валидации
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        401:
+          description: Не авторизован
+    
+    get:
+      summary: Получить настройки бюджета
+      tags: [Budget]
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Настройки бюджета
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Budget'
+        401:
+          description: Не авторизован
+        404:
+          description: Настройки не найдены
+    
+    delete:
+      summary: Удалить настройки бюджета
+      tags: [Budget]
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Настройки удалены
+        401:
+          description: Не авторизован
+  
+  /api/budget/summary:
+    get:
+      summary: Получить сводку по бюджету
+      tags: [Budget]
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Сводка по бюджету
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalBudget:
+                    type: number
+                  totalSpent:
+                    type: number
+                  remaining:
+                    type: number
+                  percentageUsed:
+                    type: number
+        401:
+          description: Не авторизован
+  
+  /api/budget/history:
+    get:
+      summary: Получить историю бюджета
+      tags: [Budget]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: startDate
+          schema:
+            type: string
+            format: date-time
+          description: Дата начала периода
+        - in: query
+          name: endDate
+          schema:
+            type: string
+            format: date-time
+          description: Дата окончания периода
+      responses:
+        200:
+          description: История бюджета
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    month:
+                      type: string
+                    budget:
+                      type: number
+                    spent:
+                      type: number
+        401:
+          description: Не авторизован
+  
+  /api/budget/categories:
+    put:
+      summary: Обновить категории бюджета
+      tags: [Budget]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                categories:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      limit:
+                        type: number
+      responses:
+        200:
+          description: Категории обновлены
+        401:
+          description: Не авторизован
