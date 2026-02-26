@@ -1,6 +1,7 @@
 import { validationResult } from 'express-validator';
 import jwt from 'jsonwebtoken';
 import User from './AuthSchema.js';
+import logger from '../../shared/config/logger.js';
 
 /**
  * Генерация JWT токена
@@ -54,7 +55,7 @@ export const register = async (req, res) => {
       user: user.toPublicJSON(),
     });
   } catch (error) {
-    console.error('Register Error:', error);
+    logger.error({ err: error }, 'Register Error');
     res.status(500).json({
       message: 'Ошибка при регистрации',
       error: error.message,
@@ -117,7 +118,7 @@ export const login = async (req, res) => {
       user: user.toPublicJSON(),
     });
   } catch (error) {
-    console.error('Login Error:', error);
+    logger.error({ err: error }, 'Login Error');
     res.status(500).json({
       message: 'Ошибка при авторизации',
       error: error.message,
@@ -143,7 +144,7 @@ export const getMe = async (req, res) => {
       user: user.toPublicJSON(),
     });
   } catch (error) {
-    console.error('GetMe Error:', error);
+    logger.error({ err: error }, 'GetMe Error');
     res.status(500).json({
       message: 'Ошибка при получении профиля',
       error: error.message,
@@ -178,7 +179,7 @@ export const updateProfile = async (req, res) => {
       user: user.toPublicJSON(),
     });
   } catch (error) {
-    console.error('UpdateProfile Error:', error);
+    logger.error({ err: error }, 'GetMe Error');
     res.status(500).json({
       message: 'Ошибка при обновлении профиля',
       error: error.message,
@@ -231,7 +232,7 @@ export const changePassword = async (req, res) => {
       message: 'Пароль успешно изменен',
     });
   } catch (error) {
-    console.error('ChangePassword Error:', error);
+    logger.error({ err: error }, 'ChangePassword Error');
     res.status(500).json({
       message: 'Ошибка при изменении пароля',
       error: error.message,
@@ -278,7 +279,7 @@ export const deleteAccount = async (req, res) => {
       message: 'Аккаунт успешно удален',
     });
   } catch (error) {
-    console.error('DeleteAccount Error:', error);
+    logger.error({ err: error }, 'DeleteAccount Error');
     res.status(500).json({
       message: 'Ошибка при удалении аккаунта',
       error: error.message,
