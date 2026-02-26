@@ -1,6 +1,7 @@
 import { validationResult } from 'express-validator';
 import Expense from '../expenses/ExpenseSchema.js';
 import BudgetSettings from './BudgetSchema.js';
+import logger from '../../shared/config/logger.js';
 
 /**
  * Создание или обновление настроек бюджета
@@ -62,7 +63,7 @@ export const createOrUpdateSettings = async (req, res) => {
       settings,
     });
   } catch (error) {
-    console.error('CreateOrUpdateSettings Error:', error);
+    logger.error({ err: error }, 'CreateOrUpdateSettings Error');
     res.status(500).json({
       message: 'Ошибка при создании/обновлении настроек',
       error: error.message,
@@ -88,7 +89,7 @@ export const getSettings = async (req, res) => {
       settings,
     });
   } catch (error) {
-    console.error('GetSettings Error:', error);
+    logger.error({ err: error }, 'GetSettings Error');
     res.status(500).json({
       message: 'Ошибка при получении настроек',
       error: error.message,
@@ -161,7 +162,7 @@ export const getBudgetSummary = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error('GetBudgetSummary Error:', error);
+    logger.error({ err: error }, 'GetBudgetSummary Error');
     res.status(500).json({
       message: 'Ошибка при получении сводки',
       error: error.message,
@@ -199,7 +200,7 @@ export const updateCategories = async (req, res) => {
       categories: settings.categories,
     });
   } catch (error) {
-    console.error('UpdateCategories Error:', error);
+    logger.error({ err: error }, 'UpdateCategories Error');
     res.status(500).json({
       message: 'Ошибка при обновлении категорий',
       error: error.message,
@@ -225,7 +226,7 @@ export const deleteSettings = async (req, res) => {
       message: 'Настройки бюджета удалены',
     });
   } catch (error) {
-    console.error('DeleteSettings Error:', error);
+    logger.error({ err: error }, 'DeleteSettings Error');
     res.status(500).json({
       message: 'Ошибка при удалении настроек',
       error: error.message,
@@ -295,7 +296,7 @@ export const getBudgetHistory = async (req, res) => {
       currencyCode: settings.currencyCode,
     });
   } catch (error) {
-    console.error('GetBudgetHistory Error:', error);
+    logger.error({ err: error }, 'GetBudgetHistory Error');
     res.status(500).json({
       message: 'Ошибка при получении истории',
       error: error.message,

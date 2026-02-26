@@ -51,7 +51,7 @@ export const createExpense = async (req, res) => {
       expense,
     });
   } catch (error) {
-    console.error('CreateExpense Error:', error);
+    logger.error({ err: error }, 'CreateExpense Error');
     res.status(500).json({
       message: 'Ошибка при создании расхода',
       error: error.message,
@@ -149,7 +149,7 @@ export const getExpenses = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error('GetExpenses Error:', error);
+    logger.error({ err: error }, 'GetExpenses Error');
     res.status(500).json({
       message: 'Ошибка при получении расходов',
       error: error.message,
@@ -178,7 +178,7 @@ export const getExpenseById = async (req, res) => {
       expense,
     });
   } catch (error) {
-    console.error('GetExpenseById Error:', error);
+    logger.error({ err: error }, 'GetExpenseById Error');
     res.status(500).json({
       message: 'Ошибка при получении расхода',
       error: error.message,
@@ -241,7 +241,7 @@ export const updateExpense = async (req, res) => {
       expense,
     });
   } catch (error) {
-    console.error('UpdateExpense Error:', error);
+    logger.error({ err: error }, 'UpdateExpense Error');
     res.status(500).json({
       message: 'Ошибка при обновлении расхода',
       error: error.message,
@@ -271,7 +271,7 @@ export const deleteExpense = async (req, res) => {
       expense,
     });
   } catch (error) {
-    console.error('DeleteExpense Error:', error);
+    logger.error({ err: error }, 'DeleteExpense Error');
     res.status(500).json({
       message: 'Ошибка при удалении расхода',
       error: error.message,
@@ -309,7 +309,7 @@ export const getExpensesByCategory = async (req, res) => {
       categories: categoryStats,
     });
   } catch (error) {
-    console.error('GetExpensesByCategory Error:', error);
+    logger.error({ err: error }, 'GetExpensesByCategory Error');
     res.status(500).json({
       message: 'Ошибка при получении статистики по категориям',
       error: error.message,
@@ -347,7 +347,7 @@ export const getExpensesStatistics = async (req, res) => {
       statistics,
     });
   } catch (error) {
-    console.error('GetExpensesStatistics Error:', error);
+    logger.error({ err: error }, 'GetExpensesStatistics Error');
     res.status(500).json({
       message: 'Ошибка при получении статистики',
       error: error.message,
@@ -379,7 +379,7 @@ export const bulkDeleteExpenses = async (req, res) => {
       deletedCount: result.deletedCount,
     });
   } catch (error) {
-    console.error('BulkDeleteExpenses Error:', error);
+    logger.error({ err: error }, 'BulkDeleteExpenses Error');
     res.status(500).json({
       message: 'Ошибка при массовом удалении',
       error: error.message,
