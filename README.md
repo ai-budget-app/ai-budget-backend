@@ -4,63 +4,84 @@
 
 - Node.js: v18.x или выше
 - Docker
-- MongoDB (управляется через Docker, см. docker-compose.yml)
+- MongoDB (локально через Docker, либо MongoDB Atlas для прода)
 
 ## Требования к рабочему окружению
 
 - Docker
 - Postman
 
-## Запуск приложения
+---
 
-Для запуска всей инфраструктуры (MongoDB, бэкенд), предварительно перейдите в директорию с `docker-compose.yml`:
+## Конфигурация (.env)
 
+Бэкенд конфигурируется через файл `.env` в корне проекта.  
+**Этот файл не коммитится в git** — у каждого разработчика он свой.  
+За основу берётся `.env.example`:
+
+```sh
+cp .env.example .env
+```
+
+### Переменные окружения
+
+| Переменная | Для чего нужна |
+|---|---|
+| `MONGO_URI` | Адрес подключения к MongoDB (локальный контейнер или Atlas) |
+| `JWT_SECRET` | Секретный ключ для подписи JWT-токенов при авторизации. Любая строка, чем длиннее — тем лучше. **В проде обязательно менять.** |
+| `PORT` | Порт на котором запускается сервер (по умолчанию 5000) |
+| `NODE_ENV` | Режим работы приложения: `development` — локалка (подробные ошибки в ответах), `production` — прод (ошибки скрыты от пользователя) |
+
+---
+
+## Режим 1: Локальная разработка (MongoDB в Docker)
+
+MongoDB поднимается в контейнере на твоей машине. Ничего устанавливать не нужно — только Docker.
+
+**1. Создай `.env`:**
+```
+MONGO_URI=mongodb://admin:secure_password@localhost:27017/zenny?authSource=admin
+JWT_SECRET=любая_строка_для_локалки
+PORT=5000
+NODE_ENV=development
+```
+
+**2. Подними контейнеры:**
 ```sh
 docker-compose up -d
 ```
 
-Бэкенд API доступен по адресу: http://localhost:5000  
-MongoDB работает на порту 27017
+Бэкенд API: http://localhost:5000  
+MongoDB: localhost:27017
 
-## Конфигурация
-
-Бэкенд конфигурируется через файл `.env` в директории проекта. Пример:
-
+**Управление контейнерами:**
+```sh
+docker-compose ps        # статус контейнеров
+docker-compose logs -f backend  # логи бэкенда
+docker-compose stop      # остановить
+docker-compose down      # остановить и удалить контейнеры
 ```
-MONGO_URI=mongodb://admin:secure_password@mongo:27017/mydatabase
-JWT_SECRET=your_jwt_secret
+
+---
+
+## Режим 2: Подключение к продовой БД (MongoDB Atlas)
+
+MongoDB находится в облаке. Контейнеры не нужны — бэкенд запускается напрямую.
+
+**1. Создай `.env`:**
+```
+MONGO_URI=mongodb+srv://<user>:<password>@cluster0.xxxxxx.mongodb.net/zenny?retryWrites=true&w=majority&appName=Cluster0
+JWT_SECRET=сильный_секрет_для_прода
+PORT=5000
+NODE_ENV=production
 ```
 
-## Запуск приложения в IDE
-
-Для запуска проекта используйте команду:
-
+**2. Запусти бэкенд:**
 ```sh
 npm run start
 ```
 
-## Отдельный запуск инфраструктуры проекта
-
-Все команды выполняются в корневой директории проекта.
-
-Для запуска инфраструктуры проекта:
-```sh
-docker-compose up -d
-```
-
-Для остановки инфраструктуры:
-```sh
-docker-compose stop
-```
-
-Для остановки и удаления инфраструктуры:
-```sh
-docker-compose down
-```
-
-## Подготовка БД
-
-Для инициализации базы данных MongoDB могут использоваться скрипты, автоматически подключаемые через Docker Compose (см. docker-compose.yml).
+Бэкенд API: http://localhost:5000
 
 ---
 

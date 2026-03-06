@@ -6,6 +6,7 @@ pnpm-debug.log*
 package-lock.json
 .env
 .env.*
+!.env.example
 dist/
 build/
 coverage/
