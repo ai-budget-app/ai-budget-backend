@@ -55,19 +55,14 @@ const UserSchema = new mongoose.Schema(
 UserSchema.index({ email: 1 });
 
 // Хук для хеширования пароля перед сохранением
-UserSchema.pre('save', async function (next) {
+UserSchema.pre('save', async function () {
   // Хешируем пароль только если он был изменен
   if (!this.isModified('password')) {
-    return next();
+    return;
   }
 
-  try {
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
-    next();
-  } catch (error) {
-    next(error);
-  }
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
 });
 
 // Метод для сравнения паролей
